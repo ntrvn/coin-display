@@ -5,13 +5,14 @@ const data = {
   experience: ["J2 Global", "USC Interaction Lab"],
   projects: ["BarCrawler", "terminal", "Web Crawler"],
   Skill: ["C", "C++", "JavaScript", "React"]
-}
+};
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.captureText = this.captureText.bind(this);
     this.state = {
+      textLine: [],
       text: "$ ",
       upper: false
     };
@@ -40,8 +41,11 @@ class App extends Component {
     } else if (e.key === "Enter") {
       document.getElementById("ls").style.visibility = "visible";
     } else {
+      var text = this.state.text + e.key;
+      var textLine = this.state.text.push(text);
       this.setState({
-        text: this.state.text + e.key
+        text: text,
+        textLine: textLine
       });
     }
   }
