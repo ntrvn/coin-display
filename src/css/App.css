@@ -1,0 +1,108 @@
+.box {
+  display: block;
+  width: 700px;
+  height: 400px;
+  margin: auto;
+  margin-top: 100px;
+  border-radius: 5px;
+}
+
+.navbar {
+  display: block;
+  width: 700px;
+  height: 25px;
+  background-color: rgb(254, 254, 254);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+.main {
+  display: block;
+  width: 700px;
+  height: 375px;
+  background-color: rgb(39, 39, 39);
+  outline: none;
+}
+
+.displayText {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.blinking-cursor {
+  font-weight: 100;
+  color: #2e3d48;
+  margin-left: 0;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+
+.ls {
+  visibility: hidden;
+}
+
+li {
+  list-style-type: none;
+}
+
+@keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-moz-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-o-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
