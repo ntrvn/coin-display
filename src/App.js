@@ -51,12 +51,12 @@ class App extends Component {
     } else if (e.key === "Alt") {
     } else if (e.key === "Enter") {
       var count = this.state.count + 1;
-      var textLine = this.state.textLine;
+      var textLine3 = this.state.textLine;
       var add = { text: "$ ", blink: true };
-      textLine.push(add);
-      textLine[count - 1].blink = false;
+      textLine3.push(add);
+      textLine3[count - 1].blink = false;
       this.setState({
-        textLine: textLine,
+        textLine: textLine3,
         text: "$ ",
         count: this.state.count + 1
       });
