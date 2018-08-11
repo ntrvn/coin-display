@@ -12,11 +12,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.captureText = this.captureText.bind(this);
+    this.checkHeight = this.checkHeight.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
     this.state = {
-      textLine: [{ text: "", blink: true }],
+      textLine: [{ text: "", blink: true, display: false }],
       count: 0,
+      level: 0,
       text: "$ ",
-      upper: false
+      upper: false,
+      cdText: ""
     };
   }
 
@@ -50,9 +54,13 @@ class App extends Component {
     } else if (e.key === "Control") {
     } else if (e.key === "Alt") {
     } else if (e.key === "Enter") {
+      this.checkHeight();
+      var display = this.handleEnter(
+        this.state.textLine[this.state.count].text
+      );
       var count = this.state.count + 1;
       var textLine3 = this.state.textLine;
-      var add = { text: "$ ", blink: true };
+      var add = { text: "$ ", blink: true, display: display };
       textLine3.push(add);
       textLine3[count - 1].blink = false;
       this.setState({
@@ -71,10 +79,25 @@ class App extends Component {
     }
   }
 
-  render() {
-    console.log(this.state.text);
-    console.log(this.state.textLine);
+  handleEnter(data) {
+    var text = data.split(" ");
+    if (text[1] === "ls") {
+      return true;
+    } else if (text.length > 2 && text[1] === "cd") {
+      console.log(text[2]);
+    }
+    return false;
+  }
 
+  checkHeight() {
+    const height = document.getElementById("container").clientHeight;
+    if (height > 342) {
+      document.getElementById("scroll").scrollTo(0, 1000);
+    }
+  }
+
+  render() {
+    console.log(this.state.textLine);
     return (
       <div className="App">
         <div className="box">
@@ -98,15 +121,19 @@ class App extends Component {
             className="main"
             id="maintab"
           >
-            <div className="displayText">
-              {this.state.textLine.map(el => {
-                return (
-                  <div>
-                    <p key={uid()}>{el.text}</p>
-                    {el.blink && <span className="blinking-cursor">|</span>}
-                  </div>
-                );
-              })}
+            <div className="displayText" id="scroll">
+              <div id="container">
+                {this.state.textLine.map(el => {
+                  return (
+                    <div key={uid()}>
+                      {el.display && <LevelOne />}
+                      <p>{el.text}</p>
+                      {el.blink && <span className="blinking-cursor">|</span>}
+                    </div>
+                  );
+                })}
+                <div id="dummy">a</div>
+              </div>
             </div>
           </div>
         </div>
@@ -114,5 +141,24 @@ class App extends Component {
     );
   }
 }
+
+const LevelOne = () => {
+  return (
+    <div>
+      <div>
+        <ul>
+          <li>Projects</li>
+          <li>Experience</li>
+          <li>Skills</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li>About</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 export default App;
