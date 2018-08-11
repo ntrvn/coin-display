@@ -51,16 +51,19 @@ class App extends Component {
       this.setState({
         upper: true
       });
-    } else if (e.key === "Control") {
-    } else if (e.key === "Alt") {
+    } else if (e.key === "Control" || e.key === "Alt") {
     } else if (e.key === "Enter") {
       this.checkHeight();
       var display = this.handleEnter(
-        this.state.textLine[this.state.count].text
+        this.state.textLine[this.state.count].text,
+        this
       );
       var count = this.state.count + 1;
       var textLine3 = this.state.textLine;
-      var add = { text: "$ ", blink: true, display: display };
+      var add =
+        this.state.cdText === ""
+          ? { text: "$ ", blink: true, display: display }
+          : { text: this.state.cdText + "$ ", blink: true, display: display };
       textLine3.push(add);
       textLine3[count - 1].blink = false;
       this.setState({
@@ -79,12 +82,14 @@ class App extends Component {
     }
   }
 
-  handleEnter(data) {
+  handleEnter(data, curr) {
     var text = data.split(" ");
     if (text[1] === "ls") {
       return true;
     } else if (text.length > 2 && text[1] === "cd") {
       console.log(text[2]);
+      curr.setState({ cdText: text[2] });
+      console.log(curr.state.cdText);
     }
     return false;
   }
@@ -97,7 +102,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.textLine);
     return (
       <div className="App">
         <div className="box">
