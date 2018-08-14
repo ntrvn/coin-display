@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import "./css/App.css";
 import uid from "uid";
+import LevelOne from "./LevelOne";
+import DisplayError from "./DisplayError";
 
-const data = {
-  experience: ["J2 Global", "USC Interaction Lab"],
-  projects: ["BarCrawler", "terminal", "Web Crawler"],
-  Skill: ["C", "C++", "JavaScript", "React"]
+const myData = {
+  Experience: ["J2 Global", "USC Interaction Lab"],
+  Projects: ["BarCrawler", "terminal", "Web Crawler"],
+  Skill: ["C", "C++", "JavaScript", "React"],
+  About: []
 };
 
 class App extends Component {
@@ -55,15 +58,24 @@ class App extends Component {
     } else if (e.key === "Enter") {
       this.checkHeight();
       var display = this.handleEnter(
-        this.state.textLine[this.state.count].text,
-        this
+        this.state.textLine[this.state.count].text
       );
       var count = this.state.count + 1;
       var textLine3 = this.state.textLine;
       var add =
-        this.state.cdText === ""
-          ? { text: "$ ", blink: true, display: display }
-          : { text: this.state.cdText + "$ ", blink: true, display: display };
+        display.text === ""
+          ? {
+              text: "$ ",
+              blink: true,
+              display: display.display,
+              err: display.error
+            }
+          : {
+              text: display.text + "$ ",
+              blink: true,
+              display: display.display,
+              err: display.error
+            };
       textLine3.push(add);
       textLine3[count - 1].blink = false;
       this.setState({
@@ -82,16 +94,18 @@ class App extends Component {
     }
   }
 
-  handleEnter(data, curr) {
+  handleEnter(data) {
     var text = data.split(" ");
     if (text[1] === "ls") {
-      return true;
+      return { display: true, text: "", error: false };
     } else if (text.length > 2 && text[1] === "cd") {
-      console.log(text[2]);
-      curr.setState({ cdText: text[2] });
-      console.log(curr.state.cdText);
+      if (text[2] in myData) {
+        return { display: false, text: text[2], error: false };
+      } else {
+        return { display: false, text: "", error: true };
+      }
     }
-    return false;
+    return { display: false, text: "", error: false };
   }
 
   checkHeight() {
@@ -130,6 +144,7 @@ class App extends Component {
                 {this.state.textLine.map(el => {
                   return (
                     <div key={uid()}>
+                      {el.err && <DisplayError />}
                       {el.display && <LevelOne />}
                       <p>{el.text}</p>
                       {el.blink && <span className="blinking-cursor">|</span>}
@@ -145,24 +160,5 @@ class App extends Component {
     );
   }
 }
-
-const LevelOne = () => {
-  return (
-    <div>
-      <div>
-        <ul>
-          <li>Projects</li>
-          <li>Experience</li>
-          <li>Skills</li>
-        </ul>
-      </div>
-      <div>
-        <ul>
-          <li>About</li>
-        </ul>
-      </div>
-    </div>
-  );
-};
 
 export default App;
