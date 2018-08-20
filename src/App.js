@@ -84,7 +84,7 @@ class App extends Component {
       textLine3[count - 1].blink = false;
       this.setState({
         textLine: textLine3,
-        text: "$ ",
+        text: add.text,
         count: this.state.count + 1,
         level: display.text !== "" ? display.level : this.state.level
       });
@@ -131,6 +131,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.textLine);
     return (
       <div className="App">
         <div className="box">
@@ -160,9 +161,7 @@ class App extends Component {
                   return (
                     <div key={uid()}>
                       {el.err && <DisplayError />}
-                      {el.display && (
-                        <Level level={this.state.level} data={myData} />
-                      )}
+                      {el.display && <Level level={el.level} data={myData} />}
                       <p>{el.text}</p>
                       {el.blink && <span className="blinking-cursor">|</span>}
                     </div>
