@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./css/App.css";
 import uid from "uid";
-import LevelOne from "./LevelOne";
+import Level from "./Level";
 import DisplayError from "./DisplayError";
 
 const myData = {
@@ -40,21 +40,23 @@ class App extends Component {
   captureText(e) {
     if (e.key === "Backspace") {
       var str = this.state.text;
-      var returnVal = "";
-      for (var i = 0; i < str.length - 1; i++) {
-        returnVal += str[i];
+      if (str !== "$ " && str.length !== 2) {
+        var returnVal = "";
+        for (var i = 0; i < str.length - 1; i++) {
+          returnVal += str[i];
+        }
+        var textLine = this.state.textLine;
+        textLine[this.state.count].text = returnVal;
+        this.setState({
+          text: returnVal,
+          textLine: textLine
+        });
       }
-      var textLine = this.state.textLine;
-      textLine[this.state.count].text = returnVal;
-      this.setState({
-        text: returnVal,
-        textLine: textLine
-      });
     } else if (e.key === "Shift") {
       this.setState({
         upper: true
       });
-    } else if (e.key === "Control" || e.key === "Alt") {
+    } else if (e.key === "Control" || e.key === "Alt" || e.key === "Tab") {
     } else if (e.key === "Enter") {
       this.checkHeight();
       var display = this.handleEnter(
@@ -68,20 +70,23 @@ class App extends Component {
               text: "$ ",
               blink: true,
               display: display.display,
-              err: display.error
+              err: display.error,
+              level: display.level
             }
           : {
               text: display.text + "$ ",
               blink: true,
               display: display.display,
-              err: display.error
+              err: display.error,
+              level: display.level
             };
       textLine3.push(add);
       textLine3[count - 1].blink = false;
       this.setState({
         textLine: textLine3,
         text: "$ ",
-        count: this.state.count + 1
+        count: this.state.count + 1,
+        level: display.text !== "" ? display.level : this.state.level
       });
     } else {
       var text = this.state.text + e.key;
@@ -97,15 +102,25 @@ class App extends Component {
   handleEnter(data) {
     var text = data.split(" ");
     if (text[1] === "ls") {
-      return { display: true, text: "", error: false };
+      return { display: true, text: "", error: false, level: this.state.level };
     } else if (text.length > 2 && text[1] === "cd") {
       if (text[2] in myData) {
-        return { display: false, text: text[2], error: false };
+        return {
+          display: false,
+          text: text[2],
+          error: false,
+          level: this.state.level + 1
+        };
       } else {
-        return { display: false, text: "", error: true };
+        return {
+          display: false,
+          text: "",
+          error: true,
+          level: this.state.level
+        };
       }
     }
-    return { display: false, text: "", error: false };
+    return { display: false, text: "", error: false, level: this.state.level };
   }
 
   checkHeight() {
@@ -145,7 +160,9 @@ class App extends Component {
                   return (
                     <div key={uid()}>
                       {el.err && <DisplayError />}
-                      {el.display && <LevelOne />}
+                      {el.display && (
+                        <Level level={this.state.level} data={myData} />
+                      )}
                       <p>{el.text}</p>
                       {el.blink && <span className="blinking-cursor">|</span>}
                     </div>
