@@ -2,4 +2,4 @@
 
 This is a work in progress. I upload gif to show the current progress of the app.
 
-![](https://imgur.com/a/0dFGdaj)
+![gif](https://imgur.com/a/0dFGdaj)
