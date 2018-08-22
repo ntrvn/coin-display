@@ -23,7 +23,7 @@ class App extends Component {
       level: 0,
       text: "$ ",
       upper: false,
-      cdText: ""
+      cd: ""
     };
   }
 
@@ -102,9 +102,17 @@ class App extends Component {
   handleEnter(data) {
     var text = data.split(" ");
     if (text[1] === "ls") {
-      return { display: true, text: "", error: false, level: this.state.level };
+      return {
+        display: true,
+        text: this.state.cd === "" ? "" : this.state.cd,
+        error: false,
+        level: this.state.level
+      };
     } else if (text.length > 2 && text[1] === "cd") {
       if (text[2] in myData) {
+        this.setState({
+          cd: text[2]
+        });
         return {
           display: false,
           text: text[2],
@@ -131,7 +139,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.textLine);
     return (
       <div className="App">
         <div className="box">
@@ -161,7 +168,13 @@ class App extends Component {
                   return (
                     <div key={uid()}>
                       {el.err && <DisplayError />}
-                      {el.display && <Level level={el.level} data={myData} />}
+                      {el.display && (
+                        <Level
+                          level={el.level}
+                          data={myData}
+                          text={this.state.cd}
+                        />
+                      )}
                       <p>{el.text}</p>
                       {el.blink && <span className="blinking-cursor">|</span>}
                     </div>
